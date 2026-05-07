@@ -7,5 +7,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './gif-list-item.css',
 })
 export class GifListItem {
-  imageUrls = input.required<string[]>();
+  imageUrl = input.required<string>();
 }

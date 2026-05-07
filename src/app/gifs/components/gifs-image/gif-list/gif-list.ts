@@ -8,5 +8,5 @@ import { GifListItem } from './gif-list-item/gif-list-item';
   styleUrl: './gif-list.css',
 })
 export class GifList {
-  imageUrls = input.required<string[]>();
+  imageUrl = input.required<string[]>();
 }
