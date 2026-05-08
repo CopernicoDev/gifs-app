@@ -12,7 +12,7 @@ export class Services {
 
 
   constructor() {
-    this.loadGifs
+    this.loadGifs();
   }
 
   // Inyectamos el HttpClient para hacer peticiones
@@ -20,6 +20,7 @@ export class Services {
 
   //Variable para guardar los gifs
   trendingGifs = signal<GifInterfaceObject[]>([])
+  trindingGifsLoading = signal(true)
 
   //private apiKey: string = 'TU_API_KEY_AQUI'; // <-- Pega tu API Key de Giphy aquí
   //private url: string = 'https://api.giphy.com/v1/gifs';
@@ -36,6 +37,7 @@ export class Services {
     ).subscribe((resp) => {
       const gifs = GifMapper.mapGifItemtoGifList(resp.data);
       this.trendingGifs.set(gifs);
+      this.trindingGifsLoading.set(false);
       console.log(gifs)
     }
     );
