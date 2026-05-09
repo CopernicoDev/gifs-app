@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import type { SearchResponse } from '../../interface/gifs-interface-api';
 import { GifInterfaceObject } from '../../interface/gif-interface-object';
 import { GifMapper } from '../../mapper/gif-mapper';
+import { map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class Services {
   //public gifList: any[] = [];
 
   loadSearchGifs(query: string) {
-    this.http.get<SearchResponse>(`${environment.url}/search`,
+    return this.http.get<SearchResponse>(`${environment.url}/search`,
       {
         params: {
           api_key: environment.apiKey,
@@ -39,11 +40,16 @@ export class Services {
           limit: 20
         }
       }
-    ).subscribe((resp) => {
+    ).pipe(
+      map(({ data }) => data),
+      map((items) => GifMapper.mapGifItemtoGifList(items))
+    )
+
+    /* forma tradicional de suscribirse pero en este caso se utiliza la forma moderna con .pipe()....subscribe((resp) => {
       const gifs = GifMapper.mapGifItemtoGifList(resp.data);
       this.searchGifs.set(gifs);
       this.searchGifsLoading.set(false);
-    })
+    })*/
   }
 
   loadGifs() {
