@@ -1,6 +1,6 @@
 import { Component, input, Input } from '@angular/core';
 import { GifListItem } from './gif-list-item/gif-list-item';
-import { GifInterfaceObject } from '../../../../interface/gif-interface-object';
+import { GifInterfaceObject } from '../../../interface/gif-interface-object';
 
 @Component({
   selector: 'app-gif-list',

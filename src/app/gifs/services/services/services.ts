@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import type { SearchResponse } from '../../../interface/gifs-interface-api';
-import { GifInterfaceObject } from '../../../interface/gif-interface-object';
+import type { SearchResponse } from '../../interface/gifs-interface-api';
+import { GifInterfaceObject } from '../../interface/gif-interface-object';
 import { GifMapper } from '../../mapper/gif-mapper';
 
 @Injectable({
@@ -22,10 +22,29 @@ export class Services {
   trendingGifs = signal<GifInterfaceObject[]>([])
   trindingGifsLoading = signal(true)
 
+  searchGifs = signal<GifInterfaceObject[]>([]);
+  searchGifsLoading = signal(true);
+
   //private apiKey: string = 'TU_API_KEY_AQUI'; // <-- Pega tu API Key de Giphy aquí
   //private url: string = 'https://api.giphy.com/v1/gifs';
   // Variable para guardar los gifs que recibamos
   //public gifList: any[] = [];
+
+  loadSearchGifs(query: string) {
+    this.http.get<SearchResponse>(`${environment.url}/search`,
+      {
+        params: {
+          api_key: environment.apiKey,
+          q: query,
+          limit: 20
+        }
+      }
+    ).subscribe((resp) => {
+      const gifs = GifMapper.mapGifItemtoGifList(resp.data);
+      this.searchGifs.set(gifs);
+      this.searchGifsLoading.set(false);
+    })
+  }
 
   loadGifs() {
     this.http.get<SearchResponse>(`${environment.url}/trending`,
