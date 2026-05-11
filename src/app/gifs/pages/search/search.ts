@@ -17,8 +17,6 @@ export default class Search {
     this.gifService.loadSearchGifs(query).subscribe((resp) => {
       this.searchGifs.set(resp);
     })
-
-
   }
 
 
