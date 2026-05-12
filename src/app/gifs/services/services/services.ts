@@ -84,4 +84,8 @@ export class Services {
 
   }
 
+  getHistoryGifs(query: string) {
+    return this.searchHistory()[query] ?? [];
+  }
+
 }

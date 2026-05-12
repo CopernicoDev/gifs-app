@@ -1,1 +1,4 @@
-<p>Funciona</p>
+<div class="text-2xl font-bold mt-15"> Mostrando resultados para: {{ query() }}</div>
+<section class="p-4 bg-slate-400">
+    <app-gif-list [gifList]="gifsByKey()"></app-gif-list>
+</section>
