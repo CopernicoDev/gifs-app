@@ -1,3 +1,16 @@
-<section class="p-4 bg-slate-400">
+<!--<section class="p-4 bg-slate-400">
     <app-gif-list [gifList]="gifService.trendingGifs()"></app-gif-list>
-</section>
+</section>-->
+
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+    @for (group of gifService.trendingGifsMasonryColumns(); track $index) {
+    <div class="grid gap-4">
+        @for (gif of group; track $index) {
+        <div>
+            <img class="h-auto max-w-full rounded-base" [src]="gif.url" [alt]="gif.title">
+        </div>
+        }
+    </div>
+    }
+</div>
