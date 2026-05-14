@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GifList } from '../../components/gifs-image/gif-list/gif-list';
 import { Services } from '../../services/services/services';
@@ -16,4 +16,14 @@ export default class Trending {
   gifsUrls = signal(imageUrls);
 
   gifService = inject(Services)
+
+  ScrollDivRef = viewChild<ElementRef>(' scrollContainer');
+
+  onScroll(event: Event) {
+    const ScrollDiv = this.ScrollDivRef()?.nativeElement;
+    console.log(ScrollDiv);
+
+
+
+  }
 }
