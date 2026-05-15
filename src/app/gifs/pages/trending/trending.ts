@@ -17,11 +17,19 @@ export default class Trending {
 
   gifService = inject(Services)
 
-  ScrollDivRef = viewChild<ElementRef>(' scrollContainer');
+  ScrollDivRef = viewChild<ElementRef<HTMLDivElement>>(' scrollContainer');
 
   onScroll(event: Event) {
     const ScrollDiv = this.ScrollDivRef()?.nativeElement;
-    console.log(ScrollDiv);
+    if (!ScrollDiv) return;
+    const scrollTop = ScrollDiv.scrollTop;
+    const clientHeight = ScrollDiv.clientHeight;
+    const isAtBottom = scrollTop + clientHeight >= ScrollDiv.scrollHeight;
+
+    if (isAtBottom) {
+
+    }
+
 
 
 
