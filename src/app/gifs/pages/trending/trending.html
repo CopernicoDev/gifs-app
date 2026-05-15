@@ -1,4 +1,4 @@
-<section>
+<section #scrollContainer (scroll)="onScroll($event)" class="overflow-y-scroll h-screen">
     <app-gif-list [gifList]="gifService.trendingGifs()"></app-gif-list>
 </section>
 

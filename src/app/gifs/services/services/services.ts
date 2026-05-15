@@ -29,16 +29,20 @@ export class Services {
   constructor() {
     this.loadGifs();
     const saveToLocalStorageHistory = effect(() => {
-      localStorage.setItem('history', JSON.stringify(this.searchHistory()));
-    })
+      // Solo intentamos guardar si localStorage existe (es decir, si estamos en el navegador)
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('history', JSON.stringify(this.searchHistory()));
+      }
+    });
   }
+
 
   // Inyectamos el HttpClient para hacer peticiones
   private http = inject(HttpClient);
 
   //Variable para guardar los gifs
   trendingGifs = signal<GifInterfaceObject[]>([])
-  trindingGifsLoading = signal(true)
+  trindingGifsLoading = signal(false)
   trendingGifsMasonryColumns = computed<GifInterfaceObject[][]>(() => {
     const groups = [];
     for (let i = 0; i < this.trendingGifs().length; i += 3) {
@@ -46,6 +50,7 @@ export class Services {
     }
     return groups;
   })
+  private trendingPage = signal(0);
 
   searchHistory = signal<Record<string, GifInterfaceObject[]>>(LoadFromLocalStorageHistory());
   searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
@@ -86,17 +91,24 @@ export class Services {
   }
 
   loadGifs() {
+    if (this.trindingGifsLoading()) return;
+    this.trindingGifsLoading.set(true);
     this.http.get<SearchResponse>(`${environment.url}/trending`,
       {
         params: {
-          api_key: environment.apiKey
+          api_key: environment.apiKey,
+          limit: 20,
+          offset: this.trendingPage() * 20
         }
       }
     ).subscribe((resp) => {
       const gifs = GifMapper.mapGifItemtoGifList(resp.data);
-      this.trendingGifs.set(gifs);
+      this.trendingGifs.update(currentGifs => [
+        ...currentGifs,
+        ...gifs
+      ]);
+      this.trendingPage.update((page) => page + 1);
       this.trindingGifsLoading.set(false);
-      console.log(gifs)
     }
     );
 
